@@ -25,7 +25,9 @@
     @yield('css_after')
     @yield('js_after')
 </head>
-<body>
-    @yield('content')
+<body >
+    <div id="app">
+        @yield('content')
+    </div>
 </body>
 </html>
