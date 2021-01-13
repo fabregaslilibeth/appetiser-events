@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use PhpParser\Node\Expr\Cast\Object_;
 
 class EventController extends Controller
@@ -15,7 +16,7 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
+     * @return Collection
      */
     public function index()
     {
@@ -28,28 +29,24 @@ class EventController extends Controller
             $dates->push($start->copy());
             $start->addDay();
         }
-        //iterate days
-        //for each day, loop through events and check if that day is with events, how? check if date is in between event dates and week days are included
-        //if true, push the events for that day
-
 
         $events = Event::all();
 
         $withEvents = $dates->map(function ($date) use ($events) {
-            $eee = $events->map(function($event) use ($date) {
-                return [
-                    'name' => $date >= $event->from && $date <= $event->to && in_array($date->format('D'), $event->days) ? $event->name : ''
-                ];
+            $eee = $events->filter(function($event) use ($date) {
+                return $date >= $event->from && $date <= $event->to && in_array($date->format('D'), $event->days);
+            })->map(function ($event) use ($date) {
+                return $event->name;
             });
 
-            return json_encode([
+            return ([
                 'date' => $date->format('d'),
                 'day' => $date->format('D'),
-                'name' => $eee->flatten(2)
+                'name' => $eee->flatten()
             ]);
         });
 
-        return view('index', compact('dates', 'period', 'withEvents'));
+        return ['events' => $withEvents, 'period' => $period->format('M Y')];
     }
 
     /**

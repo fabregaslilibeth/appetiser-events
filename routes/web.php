@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [EventController::class, 'index']);
-Route::resource('/events', EventController::class)->except(['index', 'edit', 'update', 'destroy']);
+Route::get('/', function() {
+    return view('index');
+});
+
+Route::resource('/events', EventController::class)->except(['edit', 'update', 'destroy']);

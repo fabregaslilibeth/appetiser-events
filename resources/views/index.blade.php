@@ -1,25 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row m-4">
-            <div class="col-4">
-                <create-event></create-event>
-            </div>
-            <div class="col-8">
-                <ul class="list-group list-group-flush">
-                    {{ $period->format('M Y')  }}
-                    @foreach($withEvents as $event)
+    <div class="container-fluid bg-dark">
+       <div class="row">
+           <div class="container-fluid bg-light m-4 p-4 mx-auto col-11 rounded position-relative">
+               <h4 class="font-weight-bolder text-uppercase position-fixed">Calendar</h4>
+               <hr>
+               <div class="row m-4">
+                   <div class="col-5 position-relative">
+                       <div class="position-fixed">
+                           <create-event></create-event>
+                       </div>
 
-                        <li class="list-group-item {{ json_decode(($event))->name ? 'bg-success' : '' }}">
-                            {{ json_decode(($event))->date }}
-                            {{ json_decode(($event))->day }}
-{{--                            {{ json_decode(($event))->name }}--}}
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
+                   </div>
+                   <div class="col-7 position-relative">
+                       <div class="position-relative">
+                           <events></events>
+                       </div>
+                   </div>
+               </div>
 
+           </div>
+       </div>
     </div>
 @endsection
