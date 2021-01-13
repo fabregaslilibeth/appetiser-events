@@ -25,29 +25,28 @@ class EventController extends Controller
 
         $dates = collect();
         while ($start->lte($end)) {
-
             $dates->push($start->copy());
             $start->addDay();
         }
+        //iterate days
+        //for each day, loop through events and check if that day is with events, how? check if date is in between event dates and week days are included
+        //if true, push the events for that day
 
-        $event = Event::first();
 
-        $withEvents = $dates->map(function ($date) use ($event) {
-            if (($date >= $event->from) && ($date <= $event->to) && (in_array($date->format('D'), $event->days))){
-                $a = [
-                    'date' => $date->format('d'),
-                    'day' => $date->format('D'),
-                    'name' => $event->name
+        $events = Event::all();
+
+        $withEvents = $dates->map(function ($date) use ($events) {
+            $eee = $events->map(function($event) use ($date) {
+                return [
+                    'name' => $date >= $event->from && $date <= $event->to && in_array($date->format('D'), $event->days) ? $event->name : ''
                 ];
-                return json_encode($a);
-            }else{
-                $a = [
-                    'date' => $date->format('d'),
-                    'day' => $date->format('D'),
-                    'name' => ''
-                ];
-                return json_encode($a);
-            }
+            });
+
+            return json_encode([
+                'date' => $date->format('d'),
+                'day' => $date->format('D'),
+                'name' => $eee->flatten(2)
+            ]);
         });
 
         return view('index', compact('dates', 'period', 'withEvents'));
