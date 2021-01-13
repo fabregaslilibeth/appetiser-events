@@ -18,13 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('name');
             $table->dateTime('from');
             $table->dateTime('to');
-            $table->boolean('monday')->default(false)->nullable();
-            $table->boolean('tuesday')->default(false)->nullable();
-            $table->boolean('wednesday')->default(false)->nullable();
-            $table->boolean('thursday')->default(false)->nullable();
-            $table->boolean('friday')->default(false)->nullable();
-            $table->boolean('saturday')->default(false)->nullable();
-            $table->boolean('sunday')->default(false)->nullable();
+            $table->json('days');
             $table->timestamps();
         });
     }

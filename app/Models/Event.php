@@ -14,13 +14,14 @@ class Event extends Model
     protected $casts = [
         'from' => 'datetime',
         'to' => 'datetime',
-        'monday' => 'boolean',
-        'tuesday' => 'boolean',
-        'wednesday' => 'boolean',
-        'thursday' => 'boolean',
-        'friday' => 'boolean',
-        'saturday' => 'boolean',
-        'sunday' => 'boolean',
+        'days' => 'array',
+//        'monday' => 'boolean',
+//        'tuesday' => 'boolean',
+//        'wednesday' => 'boolean',
+//        'thursday' => 'boolean',
+//        'friday' => 'boolean',
+//        'saturday' => 'boolean',
+//        'sunday' => 'boolean',
     ];
 }
 

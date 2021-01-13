@@ -9,8 +9,11 @@
             <div class="col-8">
                 <ul class="list-group list-group-flush">
                     {{ $period->format('M Y')  }}
-                    @foreach($dates as $date)
-                        <li class="list-group-item">{{ $date->format('d') }} {{ $date->format('D') }}</li>
+                    @foreach($withEvents as $event)
+                        <li class="list-group-item {{ json_decode(($event))->name ? 'bg-success' : '' }}">
+                            {{ json_decode(($event))->date }}
+                            {{ json_decode(($event))->day }}
+                            {{ ucwords(json_decode(($event))->name) }}</li>
                     @endforeach
                 </ul>
             </div>

@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class EventController extends Controller
 {
@@ -22,23 +23,34 @@ class EventController extends Controller
         $start = now()->startOfMonth();
         $end = now()->endOfMonth();
 
-        $dates = [];
+        $dates = collect();
         while ($start->lte($end)) {
-            $dates[] = $start->copy();
+
+            $dates->push($start->copy());
             $start->addDay();
         }
 
-        return view('index', compact(['dates', 'period']));
-    }
+        $event = Event::first();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $withEvents = $dates->map(function ($date) use ($event) {
+            if (($date >= $event->from) && ($date <= $event->to) && (in_array($date->format('D'), $event->days))){
+                $a = [
+                    'date' => $date->format('d'),
+                    'day' => $date->format('D'),
+                    'name' => $event->name
+                ];
+                return json_encode($a);
+            }else{
+                $a = [
+                    'date' => $date->format('d'),
+                    'day' => $date->format('D'),
+                    'name' => ''
+                ];
+                return json_encode($a);
+            }
+        });
+
+        return view('index', compact('dates', 'period', 'withEvents'));
     }
 
     /**
@@ -53,60 +65,9 @@ class EventController extends Controller
             'name' => $request->name,
             'from' => $request->dateFrom,
             'to' => $request->dateTo,
-            'monday' => $request->monday,
-            'tuesday' => $request->tuesday,
-            'wednesday' => $request->wednesday,
-            'thursday' => $request->thursday,
-            'friday' => $request->friday,
-            'saturday' => $request->saturday,
-            'sunday' => $request->sunday,
+            'days' => $request->includedDays
         ]);
 
         return $event;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Event $event)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Event $event)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Event $event)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Event $event)
-    {
-        //
     }
 }

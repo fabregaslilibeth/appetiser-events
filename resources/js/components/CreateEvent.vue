@@ -18,31 +18,31 @@
                 </div>
              <div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.monday" type="checkbox" class="form-check-input" id="monday">
+                     <input v-model="days.Mon" type="checkbox" class="form-check-input" id="monday">
                      <label class="form-check-label" for="monday">M</label>
                  </div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.tuesday" type="checkbox" class="form-check-input" id="tuesday">
+                     <input v-model="days.Tue" type="checkbox" class="form-check-input" id="tuesday">
                      <label class="form-check-label" for="tuesday">Tu</label>
                  </div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.wednesday" type="checkbox" class="form-check-input" id="wednesday">
+                     <input v-model="days.Wed" type="checkbox" class="form-check-input" id="wednesday">
                      <label class="form-check-label" for="wednesday">W</label>
                  </div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.thursday" type="checkbox" class="form-check-input" id="thursday">
+                     <input v-model="days.Thu" type="checkbox" class="form-check-input" id="thursday">
                      <label class="form-check-label" for="thursday">Th</label>
                  </div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.friday" type="checkbox" class="form-check-input" id="friday">
+                     <input v-model="days.Fri" type="checkbox" class="form-check-input" id="friday">
                      <label class="form-check-label" for="friday">F</label>
                  </div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.saturday" type="checkbox" class="form-check-input" id="saturday">
+                     <input v-model="days.Sat" type="checkbox" class="form-check-input" id="saturday">
                      <label class="form-check-label" for="saturday">Sa</label>
                  </div>
                  <div class="form-check form-check-inline">
-                     <input v-model="event.sunday" type="checkbox" class="form-check-input" id="sunday">
+                     <input v-model="days.Sun" type="checkbox" class="form-check-input" id="sunday">
                      <label class="form-check-label" for="sunday">Su</label>
                  </div>
              </div>
@@ -61,18 +61,31 @@
                     name: '',
                     dateFrom: '',
                     dateTo: '',
-                    monday: '',
-                    tuesday: '',
-                    wednesday: '',
-                    thursday: '',
-                    friday: '',
-                    saturday: '',
-                    sunday: ''
+                    includedDays: [],
+                },
+                days: {
+                    Mon: true,
+                    Tue: true,
+                    Wed: true,
+                    Thu: true,
+                    Fri: true,
+                    Sat: true,
+                    Sun: true
                 }
             }
         },
         methods: {
             submit () {
+                //check days if day is true
+                //if true, push to included days
+                const days =  Object.entries(this.days).filter((day) => {
+                    return day[1] === true && day
+                });
+
+                this.event.includedDays =  Object.entries(days).map((day) => {
+                    return day[1][0]
+                });
+
                 axios.post('events', this.event)
                 .then(({data}) => {
                     console.log(data)
