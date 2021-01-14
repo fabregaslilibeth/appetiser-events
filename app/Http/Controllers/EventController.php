@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRequest;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,10 +41,10 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreEventRequest $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
         $event = Event::query()->updateOrCreate([
             'id' => 1,
