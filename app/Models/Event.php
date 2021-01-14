@@ -15,13 +15,6 @@ class Event extends Model
         'from' => 'datetime',
         'to' => 'datetime',
         'days' => 'array',
-//        'monday' => 'boolean',
-//        'tuesday' => 'boolean',
-//        'wednesday' => 'boolean',
-//        'thursday' => 'boolean',
-//        'friday' => 'boolean',
-//        'saturday' => 'boolean',
-//        'sunday' => 'boolean',
     ];
 }
 
