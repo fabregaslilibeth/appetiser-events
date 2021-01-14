@@ -22,12 +22,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    @yield('css_after')
-    @yield('js_after')
 </head>
 <body >
     <div id="app">
-
         @yield('content')
     </div>
 </body>
