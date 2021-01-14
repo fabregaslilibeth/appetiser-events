@@ -1845,6 +1845,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Errors */ "./resources/js/Errors.js");
 //
 //
 //
@@ -1899,6 +1900,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'CreateEvent',
   data: function data() {
@@ -1917,7 +1923,8 @@ __webpack_require__.r(__webpack_exports__);
         Fri: false,
         Sat: false,
         Sun: false
-      }
+      },
+      errors: new _Errors__WEBPACK_IMPORTED_MODULE_0__.default()
     };
   },
   methods: {
@@ -1930,12 +1937,17 @@ __webpack_require__.r(__webpack_exports__);
       this.event.includedDays = Object.entries(days).map(function (day) {
         return day[1][0];
       });
+<<<<<<< HEAD
       axios.post('events', this.event).then(function (data) {
         flash("Event successfully added.");
+=======
+      axios.post('events', this.event).then(function () {
+        flash("".concat(_this.event.name, " has been added."));
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
 
-        _this.$emit('eventAdded', _this.event.name);
-      })["catch"](function (e) {
-        console.log(e);
+        _this.$emit('eventAdded');
+      })["catch"](function (error) {
+        _this.errors.record(error.response.data.errors);
       });
     }
   }
@@ -2071,6 +2083,66 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/Errors.js":
+/*!********************************!*\
+  !*** ./resources/js/Errors.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Errors = /*#__PURE__*/function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "has",
+    value: function has(field) {
+      return Object.prototype.hasOwnProperty.call(this.errors, field);
+    }
+  }, {
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      if (field) {
+        delete this.errors[field];
+        return;
+      }
+
+      this.errors = {};
+    }
+  }]);
+
+  return Errors;
+}();
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Errors);
 
 /***/ }),
 
@@ -38250,6 +38322,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+<<<<<<< HEAD
   return _c(
     "div",
     { staticClass: "container-fluid py-4 px-4 px-xl-0 form-container" },
@@ -38268,6 +38341,64 @@ var render = function() {
           [
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "eventName" } }, [_vm._v("Event")]),
+=======
+  return _c("div", { staticClass: "container-fluid card p-4" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c(
+        "form",
+        {
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.submit($event)
+            },
+            click: function($event) {
+              return _vm.errors.clear($event.target.name)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "name" } }, [_vm._v("Event")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.event.name,
+                  expression: "event.name"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "text",
+                id: "name",
+                placeholder: "Event Name",
+                name: "name"
+              },
+              domProps: { value: _vm.event.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.event, "name", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.has("name")
+              ? _c("small", { staticClass: "text-danger form-text" }, [
+                  _vm._v(_vm._s(_vm.errors.get("name")))
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "form-group col-md-6" }, [
+              _c("label", { attrs: { for: "dateFrom" } }, [_vm._v("From")]),
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -38279,12 +38410,17 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
+<<<<<<< HEAD
                 attrs: {
                   type: "text",
                   id: "eventName",
                   placeholder: "Event Name"
                 },
                 domProps: { value: _vm.event.name },
+=======
+                attrs: { type: "date", id: "dateFrom", name: "dateFrom" },
+                domProps: { value: _vm.event.dateFrom },
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
@@ -38293,9 +38429,16 @@ var render = function() {
                     _vm.$set(_vm.event, "name", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.has("dateFrom")
+                ? _c("small", { staticClass: "text-danger form-text" }, [
+                    _vm._v(_vm._s(_vm.errors.get("dateFrom")))
+                  ])
+                : _vm._e()
             ]),
             _vm._v(" "),
+<<<<<<< HEAD
             _c("div", { staticClass: "form-row" }, [
               _c("div", { staticClass: "form-group col-md-6" }, [
                 _c("label", { attrs: { for: "dateFrom" } }, [
@@ -38318,6 +38461,76 @@ var render = function() {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
+=======
+            _c("div", { staticClass: "form-group  col-md-6" }, [
+              _c("label", { attrs: { for: "dateTo" } }, [_vm._v("To")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event.dateTo,
+                    expression: "event.dateTo"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date", id: "dateTo", name: "dateTo" },
+                domProps: { value: _vm.event.dateTo },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.event, "dateTo", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.errors.has("dateTo")
+                ? _c("small", { staticClass: "text-danger form-text" }, [
+                    _vm._v(_vm._s(_vm.errors.get("dateTo")))
+                  ])
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c("div", { staticClass: "form-check form-check-inline" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Mon,
+                    expression: "days.Mon"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: { type: "checkbox", id: "monday", name: "includedDays" },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Mon)
+                    ? _vm._i(_vm.days.Mon, null) > -1
+                    : _vm.days.Mon
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Mon,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Mon", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.days,
+                            "Mon",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       }
                       _vm.$set(_vm.event, "dateFrom", $event.target.value)
                     }
@@ -38352,6 +38565,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
+<<<<<<< HEAD
             _c("div", [
               _c("div", { staticClass: "form-check form-check-inline" }, [
                 _c("input", {
@@ -38389,6 +38603,39 @@ var render = function() {
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
+=======
+            _c("div", { staticClass: "form-check form-check-inline" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Tue,
+                    expression: "days.Tue"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  id: "tuesday",
+                  name: "includedDays"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Tue)
+                    ? _vm._i(_vm.days.Tue, null) > -1
+                    : _vm.days.Tue
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Tue,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Tue", $$a.concat([$$v]))
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       } else {
                         _vm.$set(_vm.days, "Mon", $$c)
                       }
@@ -38403,6 +38650,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
+<<<<<<< HEAD
               _c("div", { staticClass: "form-check form-check-inline" }, [
                 _c("input", {
                   directives: [
@@ -38439,6 +38687,46 @@ var render = function() {
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
+=======
+              _c(
+                "label",
+                { staticClass: "form-check-label", attrs: { for: "tuesday" } },
+                [_vm._v("Tue")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-check form-check-inline" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Wed,
+                    expression: "days.Wed"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  id: "wednesday",
+                  name: "includedDays"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Wed)
+                    ? _vm._i(_vm.days.Wed, null) > -1
+                    : _vm.days.Wed
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Wed,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Wed", $$a.concat([$$v]))
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       } else {
                         _vm.$set(_vm.days, "Tue", $$c)
                       }
@@ -38449,6 +38737,7 @@ var render = function() {
                 _c(
                   "label",
                   {
+<<<<<<< HEAD
                     staticClass: "form-check-label",
                     attrs: { for: "tuesday" }
                   },
@@ -38492,6 +38781,35 @@ var render = function() {
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
+=======
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Thu,
+                    expression: "days.Thu"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  id: "thursday",
+                  name: "includedDays"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Thu)
+                    ? _vm._i(_vm.days.Thu, null) > -1
+                    : _vm.days.Thu
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Thu,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Thu", $$a.concat([$$v]))
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       } else {
                         _vm.$set(_vm.days, "Wed", $$c)
                       }
@@ -38502,6 +38820,7 @@ var render = function() {
                 _c(
                   "label",
                   {
+<<<<<<< HEAD
                     staticClass: "form-check-label",
                     attrs: { for: "wednesday" }
                   },
@@ -38545,6 +38864,31 @@ var render = function() {
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
+=======
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Fri,
+                    expression: "days.Fri"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: { type: "checkbox", id: "friday", name: "includedDays" },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Fri)
+                    ? _vm._i(_vm.days.Fri, null) > -1
+                    : _vm.days.Fri
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Fri,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Fri", $$a.concat([$$v]))
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       } else {
                         _vm.$set(_vm.days, "Thu", $$c)
                       }
@@ -38555,6 +38899,7 @@ var render = function() {
                 _c(
                   "label",
                   {
+<<<<<<< HEAD
                     staticClass: "form-check-label",
                     attrs: { for: "thursday" }
                   },
@@ -38598,6 +38943,35 @@ var render = function() {
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
+=======
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Sat,
+                    expression: "days.Sat"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: {
+                  type: "checkbox",
+                  id: "saturday",
+                  name: "includedDays"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Sat)
+                    ? _vm._i(_vm.days.Sat, null) > -1
+                    : _vm.days.Sat
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Sat,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Sat", $$a.concat([$$v]))
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       } else {
                         _vm.$set(_vm.days, "Fri", $$c)
                       }
@@ -38612,6 +38986,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
+<<<<<<< HEAD
               _c("div", { staticClass: "form-check form-check-inline" }, [
                 _c("input", {
                   directives: [
@@ -38648,6 +39023,42 @@ var render = function() {
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
+=======
+              _c(
+                "label",
+                { staticClass: "form-check-label", attrs: { for: "saturday" } },
+                [_vm._v("Sat")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-check form-check-inline" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.days.Sun,
+                    expression: "days.Sun"
+                  }
+                ],
+                staticClass: "form-check-input",
+                attrs: { type: "checkbox", id: "sunday", name: "includedDays" },
+                domProps: {
+                  checked: Array.isArray(_vm.days.Sun)
+                    ? _vm._i(_vm.days.Sun, null) > -1
+                    : _vm.days.Sun
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.days.Sun,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && _vm.$set(_vm.days, "Sun", $$a.concat([$$v]))
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
                       } else {
                         _vm.$set(_vm.days, "Sat", $$c)
                       }
@@ -38665,6 +39076,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
+<<<<<<< HEAD
               _c("div", { staticClass: "form-check form-check-inline" }, [
                 _c("input", {
                   directives: [
@@ -38729,6 +39141,34 @@ var render = function() {
       ])
     ]
   )
+=======
+              _c(
+                "label",
+                { staticClass: "form-check-label", attrs: { for: "sunday" } },
+                [_vm._v("Sun")]
+              )
+            ]),
+            _vm._v(" "),
+            _vm.errors.has("includedDays")
+              ? _c("small", { staticClass: "text-danger form-text" }, [
+                  _vm._v(_vm._s(_vm.errors.get("includedDays")))
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary mt-4 px-4",
+              attrs: { type: "submit" }
+            },
+            [_vm._v("Save")]
+          )
+        ]
+      )
+    ])
+  ])
+>>>>>>> 93aa61a1e60a964355741fe45f787c0c6c13133f
 }
 var staticRenderFns = []
 render._withStripped = true

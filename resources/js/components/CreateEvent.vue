@@ -1,50 +1,54 @@
 <template>
     <div class="container-fluid py-4 px-4 px-xl-0 form-container">
         <div class="row justify-content-center">
-            <form @submit.prevent="submit">
+            <form @submit.prevent="submit" @click="errors.clear($event.target.name)">
                 <div class="form-group">
-                    <label for="eventName">Event</label>
-                    <input v-model="event.name" type="text" class="form-control" id="eventName" placeholder="Event Name">
+                    <label for="name">Event</label>
+                    <input v-model="event.name" type="text" class="form-control" id="name" placeholder="Event Name" name="name">
+                    <small class="text-danger form-text" v-if="errors.has('name')">{{ errors.get('name')}}</small>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="dateFrom">Date from</label>
-                        <input v-model="event.dateFrom" type="date" class="form-control" id="dateFrom">
+                        <label for="dateFrom">From</label>
+                        <input v-model="event.dateFrom" type="date" class="form-control" id="dateFrom" name="dateFrom">
+                        <small class="text-danger form-text" v-if="errors.has('dateFrom')">{{ errors.get('dateFrom')}}</small>
                     </div>
                     <div class="form-group  col-md-6">
-                        <label for="dateTo">Date To</label>
-                        <input v-model="event.dateTo" type="date" class="form-control" id="dateTo">
+                        <label for="dateTo">To</label>
+                        <input v-model="event.dateTo" type="date" class="form-control" id="dateTo" name="dateTo">
+                        <small class="text-danger form-text" v-if="errors.has('dateTo')">{{ errors.get('dateTo')}}</small>
                     </div>
                 </div>
                 <div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Mon" type="checkbox" class="form-check-input" id="monday">
+                        <input v-model="days.Mon" type="checkbox" class="form-check-input" id="monday" name="includedDays">
                         <label class="form-check-label" for="monday">Mon</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Tue" type="checkbox" class="form-check-input" id="tuesday">
+                        <input v-model="days.Tue" type="checkbox" class="form-check-input" id="tuesday" name="includedDays">
                         <label class="form-check-label" for="tuesday">Tue</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Wed" type="checkbox" class="form-check-input" id="wednesday">
+                        <input v-model="days.Wed" type="checkbox" class="form-check-input" id="wednesday" name="includedDays">
                         <label class="form-check-label" for="wednesday">Wed</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Thu" type="checkbox" class="form-check-input" id="thursday">
+                        <input v-model="days.Thu" type="checkbox" class="form-check-input" id="thursday" name="includedDays">
                         <label class="form-check-label" for="thursday">Thu</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Fri" type="checkbox" class="form-check-input" id="friday">
+                        <input v-model="days.Fri" type="checkbox" class="form-check-input" id="friday" name="includedDays">
                         <label class="form-check-label" for="friday">Fri</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Sat" type="checkbox" class="form-check-input" id="saturday">
+                        <input v-model="days.Sat" type="checkbox" class="form-check-input" id="saturday" name="includedDays">
                         <label class="form-check-label" for="saturday">Sat</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="days.Sun" type="checkbox" class="form-check-input" id="sunday">
+                        <input v-model="days.Sun" type="checkbox" class="form-check-input" id="sunday" name="includedDays">
                         <label class="form-check-label" for="sunday">Sun</label>
                     </div>
+                    <small class="text-danger form-text" v-if="errors.has('includedDays')">{{ errors.get('includedDays')}}</small>
                 </div>
                 <button type="submit" class="btn btn-primary mt-4 px-4">Save</button>
             </form>
@@ -53,6 +57,7 @@
 </template>
 
 <script>
+import Errors from "../Errors";
     export default {
         name: 'CreateEvent',
         data() {
@@ -71,7 +76,8 @@
                     Fri: false,
                     Sat: false,
                     Sun: false
-                }
+                },
+                errors: new Errors()
             }
         },
         methods: {
@@ -85,15 +91,14 @@
                 });
 
                 axios.post('events', this.event)
-                .then((data) => {
-                    flash("Event successfully added.")
-                    this.$emit('eventAdded', this.event.name)
-                }).catch((e) => {
-                    console.log(e)
+                .then(() => {
+                    flash(`${this.event.name} has been added.`)
+                    this.$emit('eventAdded')
+                }).catch((error) => {
+                    this.errors.record(error.response.data.errors)
                 })
             }
         }
-
     }
 </script>
 

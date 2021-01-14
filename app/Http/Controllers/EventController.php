@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRequest;
 use App\Models\Event;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
@@ -41,10 +41,10 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreEventRequest $request
      * @return Builder|Model
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
         $event = Event::query()->updateOrCreate([
             'id' => 1,
