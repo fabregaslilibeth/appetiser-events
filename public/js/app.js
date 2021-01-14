@@ -1845,6 +1845,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
+/* harmony import */ var _Errors__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Errors */ "./resources/js/Errors.js");
 //
 //
 //
@@ -1899,6 +1900,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'CreateEvent',
   data: function data() {
@@ -1917,7 +1923,8 @@ __webpack_require__.r(__webpack_exports__);
         Fri: false,
         Sat: false,
         Sun: false
-      }
+      },
+      errors: new _Errors__WEBPACK_IMPORTED_MODULE_0__.default()
     };
   },
   methods: {
@@ -1930,12 +1937,12 @@ __webpack_require__.r(__webpack_exports__);
       this.event.includedDays = Object.entries(days).map(function (day) {
         return day[1][0];
       });
-      axios.post('events', this.event).then(function (data) {
+      axios.post('events', this.event).then(function () {
         flash("".concat(_this.event.name, " has been added."));
 
-        _this.$emit('eventAdded', _this.event.name);
-      })["catch"](function (e) {
-        console.log(e);
+        _this.$emit('eventAdded');
+      })["catch"](function (error) {
+        _this.errors.record(error.response.data.errors);
       });
     }
   }
@@ -2071,6 +2078,66 @@ __webpack_require__.r(__webpack_exports__);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./resources/js/Errors.js":
+/*!********************************!*\
+  !*** ./resources/js/Errors.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Errors = /*#__PURE__*/function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "has",
+    value: function has(field) {
+      return Object.prototype.hasOwnProperty.call(this.errors, field);
+    }
+  }, {
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      if (field) {
+        delete this.errors[field];
+        return;
+      }
+
+      this.errors = {};
+    }
+  }]);
+
+  return Errors;
+}();
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Errors);
 
 /***/ }),
 
@@ -38190,12 +38257,15 @@ var render = function() {
             submit: function($event) {
               $event.preventDefault()
               return _vm.submit($event)
+            },
+            click: function($event) {
+              return _vm.errors.clear($event.target.name)
             }
           }
         },
         [
           _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "eventName" } }, [_vm._v("Event")]),
+            _c("label", { attrs: { for: "name" } }, [_vm._v("Event")]),
             _vm._v(" "),
             _c("input", {
               directives: [
@@ -38209,8 +38279,9 @@ var render = function() {
               staticClass: "form-control",
               attrs: {
                 type: "text",
-                id: "eventName",
-                placeholder: "Event Name"
+                id: "name",
+                placeholder: "Event Name",
+                name: "name"
               },
               domProps: { value: _vm.event.name },
               on: {
@@ -38221,14 +38292,18 @@ var render = function() {
                   _vm.$set(_vm.event, "name", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors.has("name")
+              ? _c("small", { staticClass: "text-danger form-text" }, [
+                  _vm._v(_vm._s(_vm.errors.get("name")))
+                ])
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "form-row" }, [
             _c("div", { staticClass: "form-group col-md-6" }, [
-              _c("label", { attrs: { for: "dateFrom" } }, [
-                _vm._v("Date from")
-              ]),
+              _c("label", { attrs: { for: "dateFrom" } }, [_vm._v("From")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -38240,7 +38315,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "date", id: "dateFrom" },
+                attrs: { type: "date", id: "dateFrom", name: "dateFrom" },
                 domProps: { value: _vm.event.dateFrom },
                 on: {
                   input: function($event) {
@@ -38250,11 +38325,17 @@ var render = function() {
                     _vm.$set(_vm.event, "dateFrom", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.has("dateFrom")
+                ? _c("small", { staticClass: "text-danger form-text" }, [
+                    _vm._v(_vm._s(_vm.errors.get("dateFrom")))
+                  ])
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group  col-md-6" }, [
-              _c("label", { attrs: { for: "dateTo" } }, [_vm._v("Date To")]),
+              _c("label", { attrs: { for: "dateTo" } }, [_vm._v("To")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -38266,7 +38347,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "date", id: "dateTo" },
+                attrs: { type: "date", id: "dateTo", name: "dateTo" },
                 domProps: { value: _vm.event.dateTo },
                 on: {
                   input: function($event) {
@@ -38276,7 +38357,13 @@ var render = function() {
                     _vm.$set(_vm.event, "dateTo", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.has("dateTo")
+                ? _c("small", { staticClass: "text-danger form-text" }, [
+                    _vm._v(_vm._s(_vm.errors.get("dateTo")))
+                  ])
+                : _vm._e()
             ])
           ]),
           _vm._v(" "),
@@ -38292,7 +38379,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "monday" },
+                attrs: { type: "checkbox", id: "monday", name: "includedDays" },
                 domProps: {
                   checked: Array.isArray(_vm.days.Mon)
                     ? _vm._i(_vm.days.Mon, null) > -1
@@ -38341,7 +38428,11 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "tuesday" },
+                attrs: {
+                  type: "checkbox",
+                  id: "tuesday",
+                  name: "includedDays"
+                },
                 domProps: {
                   checked: Array.isArray(_vm.days.Tue)
                     ? _vm._i(_vm.days.Tue, null) > -1
@@ -38390,7 +38481,11 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "wednesday" },
+                attrs: {
+                  type: "checkbox",
+                  id: "wednesday",
+                  name: "includedDays"
+                },
                 domProps: {
                   checked: Array.isArray(_vm.days.Wed)
                     ? _vm._i(_vm.days.Wed, null) > -1
@@ -38442,7 +38537,11 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "thursday" },
+                attrs: {
+                  type: "checkbox",
+                  id: "thursday",
+                  name: "includedDays"
+                },
                 domProps: {
                   checked: Array.isArray(_vm.days.Thu)
                     ? _vm._i(_vm.days.Thu, null) > -1
@@ -38491,7 +38590,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "friday" },
+                attrs: { type: "checkbox", id: "friday", name: "includedDays" },
                 domProps: {
                   checked: Array.isArray(_vm.days.Fri)
                     ? _vm._i(_vm.days.Fri, null) > -1
@@ -38540,7 +38639,11 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "saturday" },
+                attrs: {
+                  type: "checkbox",
+                  id: "saturday",
+                  name: "includedDays"
+                },
                 domProps: {
                   checked: Array.isArray(_vm.days.Sat)
                     ? _vm._i(_vm.days.Sat, null) > -1
@@ -38589,7 +38692,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-check-input",
-                attrs: { type: "checkbox", id: "sunday" },
+                attrs: { type: "checkbox", id: "sunday", name: "includedDays" },
                 domProps: {
                   checked: Array.isArray(_vm.days.Sun)
                     ? _vm._i(_vm.days.Sun, null) > -1
@@ -38625,7 +38728,13 @@ var render = function() {
                 { staticClass: "form-check-label", attrs: { for: "sunday" } },
                 [_vm._v("Sun")]
               )
-            ])
+            ]),
+            _vm._v(" "),
+            _vm.errors.has("includedDays")
+              ? _c("small", { staticClass: "text-danger form-text" }, [
+                  _vm._v(_vm._s(_vm.errors.get("includedDays")))
+                ])
+              : _vm._e()
           ]),
           _vm._v(" "),
           _c(
