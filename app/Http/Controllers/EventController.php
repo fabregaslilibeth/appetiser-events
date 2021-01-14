@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class EventController extends Controller
 {
@@ -41,7 +42,7 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return Builder|Model
      */
     public function store(Request $request)
     {

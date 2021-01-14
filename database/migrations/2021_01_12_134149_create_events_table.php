@@ -21,6 +21,8 @@ class CreateEventsTable extends Migration
             $table->json('days');
             $table->timestamps();
         });
+
+
     }
 
     /**

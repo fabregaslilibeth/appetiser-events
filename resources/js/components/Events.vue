@@ -1,22 +1,22 @@
 <template>
-    <div class="container-fluid bg-light m-4 p-4 mx-auto col-11 rounded">
+    <div class="container-fluid bg-light m-4 p-4 mx-auto col-12 col-md-11 rounded">
 
              <flash v-show="message" :message="message" class="flash"></flash>
 
         <h4 class="font-weight-bolder text-uppercase">Calendar</h4>
         <hr>
-        <div class="row m-4">
-            <div class="col-5 position-relative">
+        <div class="row">
+            <div class="col-12 col-md-5 position-relative">
                 <create-event @eventAdded="refresh"></create-event>
             </div>
 
-            <div class="col-7">
+            <div class="col-12 col-md-7">
                 <div>
-                    <h3 class="font-weight-bolder text-uppercase">{{ period }}</h3>
+                    <h3 class="font-weight-bolder text-uppercase mt-4 mt-md-0">{{ period }}</h3>
                     <hr>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" :class="event.name.length > 0 ? 'bg-event' : ''" v-for="(event, index) in events" :key="index">
-                            {{ event.date }} {{ event.day }} {{ event.name }}
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item" :class="event.name.length > 0 ? 'bg-event' : 'bg-transparent'" v-for="(event, index) in events" :key="index">
+                            {{ event.date }} {{ event.day }} <span class="ml-3">{{ event.name }}</span>
                         </li>
                     </ul>
                 </div>
@@ -48,7 +48,7 @@ export default {
 
             })
         },
-        refresh(event) {
+        refresh() {
             this.getEvents()
         },
     }

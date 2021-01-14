@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid card p-4">
+    <div class="container-fluid py-4 px-4 px-xl-0 form-container">
         <div class="row justify-content-center">
             <form @submit.prevent="submit">
                 <div class="form-group">
@@ -86,7 +86,7 @@
 
                 axios.post('events', this.event)
                 .then((data) => {
-                    flash(`${this.event.name} has been added.`)
+                    flash("Event successfully added.")
                     this.$emit('eventAdded', this.event.name)
                 }).catch((e) => {
                     console.log(e)
@@ -96,3 +96,10 @@
 
     }
 </script>
+
+
+<style>
+    .form-container {
+        box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    }
+</style>
